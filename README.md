@@ -2,13 +2,35 @@
 
 A concise B2B executive landing page about turning commissioning experience into reusable engineering products, starting with one measurable pilot. Six continuous sections cover the opportunity, industry problem, product, field advantage, commercial path, and proposed Google Cloud discussion.
 
-![Executive landing page desktop preview](docs/images/scrolling-presentation-preview.png)
-
 ## View the complete website
 
-The complete six-section page is shown below. Click the image to open it at full resolution. These screenshots can be viewed directly on GitHub without installing or running the project.
+All six sections appear once below, in website order. Click any screenshot for full resolution. No installation is required to view them on GitHub.
 
-[![Complete six-section executive landing page](docs/images/landing-full-page.png)](docs/images/landing-full-page.png)
+### 1. The Opportunity
+
+[![1. The Opportunity](docs/images/landing-01-opportunity.png)](docs/images/landing-01-opportunity.png)
+
+### 2. The Industry Problem
+
+[![2. The Industry Problem — Uptime statistics and training gap](docs/images/landing-02-industry.png)](docs/images/landing-02-industry.png)
+
+### 3. The Product
+
+[![3. The Product — Engineering Diagnostic Workspace](docs/images/landing-03-product.png)](docs/images/landing-03-product.png)
+
+### 4. Why Us
+
+[![4. Why Us — Field experience and engineering intelligence loop](docs/images/landing-04-advantage.png)](docs/images/landing-04-advantage.png)
+
+### 5. Business Opportunity
+
+[![5. Business Opportunity — From pilot to product](docs/images/landing-05-business.png)](docs/images/landing-05-business.png)
+
+### 6. Google Cloud — Proposed Next Step
+
+[![6. Google Cloud — Proposed next step](docs/images/landing-06-google-cloud.png)](docs/images/landing-06-google-cloud.png)
+
+[Open the complete page as one long screenshot](docs/images/landing-full-page.png).
 
 <details>
 <summary>Mobile preview — current version</summary>
