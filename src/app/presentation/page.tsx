@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { PresentationDeck } from "@/components/presentation/presentation-deck";
+import { ExecutiveLanding } from "@/components/presentation/executive-landing";
 
 export const metadata: Metadata = { title: "Presentation" };
 
 export default function PresentationPage() {
-  return <PresentationDeck />;
+  return <ExecutiveLanding />;
 }

@@ -1,0 +1,234 @@
+import type { ReferenceId } from "./references";
+
+export type CapabilityMaturity = "CURRENT PROTOTYPE" | "PROPOSED PILOT" | "FUTURE VISION";
+export type EvidenceBasis = "company-brief" | "industry-source" | "proposal" | "illustrative";
+export type SupportingPoint = {
+  title: string;
+  detail: string;
+  basis: EvidenceBasis;
+  maturity?: CapabilityMaturity;
+  referenceIds?: readonly ReferenceId[];
+};
+export type PresentationSection = {
+  id: string;
+  title: string;
+  headline: string;
+  subtitle: string;
+  businessArgument: string;
+  points: readonly [SupportingPoint, SupportingPoint, SupportingPoint, ...SupportingPoint[]];
+  visual: { type: string; description: string };
+  keyTakeaway: string;
+  transition: string;
+  speakerNotes: string;
+  referenceIds: readonly ReferenceId[];
+  maturityLabels: readonly CapabilityMaturity[];
+};
+
+export const presentation = {
+  title: "AI-Powered Commissioning Intelligence Platform",
+  version: "Business content draft 1.0",
+  status: "INTERNAL REVIEW — COMPANY CLAIMS REQUIRE SIGN-OFF",
+  format: "Ten sequential sections for a future continuous-scrolling presentation",
+  audience: ["Engineering services leadership", "Google Cloud account and technical teams", "Equipment manufacturers", "Commissioning companies and infrastructure operators"],
+  companyEvidence: "Company experience and prototype status are supplied by the business brief; internal records and demonstrations have not been independently audited.",
+  terminology: "AI training means training engineers with AI-assisted learning; it does not imply model training or rights to fine-tune on third-party documents.",
+  productBoundary: "Decision support and simulated practice. No live control, established PLC/sensor connection, production Digital Twin, or demonstrated financial return.",
+} as const;
+
+export const presentationSections = [
+  {
+    id: "01",
+    title: "From Field Experience to Intelligent Infrastructure",
+    headline: "Turn commissioning experience into a repeatable software offering.",
+    subtitle: "An engineering services business can extend its expertise through reviewed knowledge, realistic practice, and commissioning support.",
+    businessArgument: "The commercial opportunity is to make field expertise reusable across projects without removing engineering accountability.",
+    points: [
+      { title: "Start with the work we know", detail: "Our business brief describes practical commissioning experience in data center electrical power and liquid-cooling equipment, where documentation, test evidence, and engineering judgment must align.", basis: "company-brief" },
+      { title: "Package expertise into a product", detail: "Convert permitted checklists, resolved issues, and expert reasoning into a reviewed knowledge base supporting engineer training and project delivery.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Enter through a defined buyer problem", detail: "Begin with commissioning and training managers seeking repeatable preparation and support; equipment manufacturers and operators are potential later buyers, not confirmed customers.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Build beyond demonstrations", detail: "Document RAG, retrieval, Agent workflows, and Digital Twin elements have been demonstrated according to the brief. Commercial software still requires evaluation, access controls, maintainability, and a supported delivery model.", basis: "company-brief", maturity: "CURRENT PROTOTYPE" },
+    ],
+    visual: { type: "business-evolution", description: "A left-to-right progression: Field services → Reviewed engineering knowledge → Proposed software offering. Label demonstrations separately from commercial readiness; use no customer logos or revenue chart." },
+    keyTakeaway: "Our proposed product extends engineering expertise; it does not replace the engineer.",
+    transition: "The next question is why commissioning teams need this support now.",
+    speakerNotes: "We are proposing an extension of our engineering business, grounded in the power and liquid-cooling commissioning experience described in the company brief. Today, much of that value is delivered through people and project documents. The opportunity is to package selected, permitted knowledge into software that supports preparation, training, and problem solving across engagements. Our initial buyer hypothesis is the commissioning or training manager, with manufacturers and infrastructure operators as potential subsequent audiences. Existing demonstrations provide a starting point, not proof of commercial readiness. The business decision is whether a focused pilot can establish a repeatable user benefit that customers would value and pay for.",
+    referenceIds: [],
+    maturityLabels: ["CURRENT PROTOTYPE", "PROPOSED PILOT"],
+  },
+  {
+    id: "02",
+    title: "The Industry Challenge",
+    headline: "Reliability depends on people managing increasingly complex systems.",
+    subtitle: "Commissioning must control procedural risk while coordinating power, cooling, controls, and project handover.",
+    businessArgument: "Better preparation and decision support address a credible operational problem, but their impact must be measured locally.",
+    points: [
+      { title: "Reliability progress does not remove exposure", detail: "Uptime Institute's 2025 outage-analysis release reports improving overall trends while highlighting procedural weaknesses and more complex infrastructure. It does not establish an AI-related reduction in outages.", basis: "industry-source", referenceIds: ["uptime-outage-analysis-2025"] },
+      { title: "Procedure quality and execution both matter", detail: "Uptime identifies missed or inadequate procedures within human-error-related incidents. This is a subset of reported incidents, not evidence that human error causes a stated share of every outage.", basis: "industry-source", referenceIds: ["uptime-outage-analysis-2025"] },
+      { title: "Project interfaces add pressure", detail: "ASHRAE's commissioning framework highlights the coordination demands of rapid power and cooling deployment. Clear design feedback and handover evidence are important parts of that context.", basis: "industry-source", referenceIds: ["ashrae-performance-validation"] },
+      { title: "Translate risk into an addressable workflow", detail: "A mismatched control sequence, unresolved test exception, or missing acceptance record can trigger rework and schedule exposure. Actual delay, escalation, and labor costs must come from the pilot sponsor's records.", basis: "illustrative" },
+    ],
+    visual: { type: "risk-chain", description: "Show system interdependencies → interpretation/procedure gaps → repeat testing, delayed handover, and operational exposure. Attach source labels to industry context and an illustrative label to the workflow; do not size risks with unsupported percentages." },
+    keyTakeaway: "The opportunity is to strengthen commissioning decisions, not promise to eliminate outages.",
+    transition: "Documentation is necessary, but it cannot provide experience with every failure combination.",
+    speakerNotes: "The industry evidence supports a specific problem rather than a blanket claim that reliability is getting worse. Uptime's 2025 release describes improving overall outage trends alongside procedural weaknesses and growing complexity. We deliberately avoid percentages here because the public release does not expose every underlying survey denominator and filter. ASHRAE separately highlights commissioning coordination and feedback pressures in rapidly deployed infrastructure. For us, the practical entry point is narrower: help engineers prepare for exceptions, use the correct evidence, and close documentation gaps. We will measure those workflows in a pilot, rather than convert industry outage statistics into an assumed company savings figure.",
+    referenceIds: ["uptime-outage-analysis-2025", "ashrae-performance-validation"],
+    maturityLabels: [],
+  },
+  {
+    id: "03",
+    title: "Why Traditional Training Falls Short",
+    headline: "Engineers need practice with exceptions, not only the expected sequence.",
+    subtitle: "Documents and supervised fieldwork remain essential; simulated cases can add repeatable diagnostic practice.",
+    businessArgument: "A bounded simulation environment can expose engineers to difficult scenarios without deliberately faulting operating equipment.",
+    points: [
+      { title: "Documents describe intended behavior", detail: "A manual or checklist can explain normal operation, yet a learner must still reconcile conflicting indications, equipment revisions, and incomplete evidence during a fault.", basis: "illustrative" },
+      { title: "Practice competing explanations", detail: "Illustrative cases include unexpected sensor readings, stale communications, power-control permissive mismatches, cooling anomalies, and failures spanning equipment and supervisory controls.", basis: "illustrative", maturity: "PROPOSED PILOT" },
+      { title: "Repeat rare events without equipment exposure", detail: "Use an isolated software scenario to replay a fault, change one condition, and compare diagnostic choices. No live PLC connection or deliberate failure of customer equipment is required.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Make learning observable", detail: "Assess evidence selection, procedure use, reasoning, and escalation on unseen cases. Simulation performance informs training needs; it does not certify competence to operate equipment.", basis: "proposal", maturity: "PROPOSED PILOT" },
+    ],
+    visual: { type: "learning-comparison", description: "Three complementary learning modes: Documents for reference; Field practice for supervised execution; Proposed simulator for repeatable exceptions. Under the simulator, branch a single alarm into sensor, communications, and process hypotheses." },
+    keyTakeaway: "Simulation adds diagnostic practice while retaining approved procedures and supervised field learning.",
+    transition: "Useful scenarios require the engineering judgment that makes our company relevant.",
+    speakerNotes: "This is not an argument for replacing manuals, checklists, or supervised commissioning. It is an argument for adding practice that normal project schedules may not provide. A learner may see a low-flow indication, but the useful skill is deciding whether it reflects a process fault, a measurement problem, or stale communications. An isolated simulator can present those alternatives repeatedly without creating a physical fault in operating equipment. The proposed evaluation should reward justified reasoning, procedural discipline, and appropriate escalation, rather than speed alone. We must still test whether these exercises improve performance on new cases; a simulator score is not a field authorization or competency certification.",
+    referenceIds: [],
+    maturityLabels: ["PROPOSED PILOT"],
+  },
+  {
+    id: "04",
+    title: "Our Competitive Advantage",
+    headline: "The differentiator is engineering knowledge that experts can verify.",
+    subtitle: "Field context, traceable records, and experienced reviewers give generic AI a commissioning-specific foundation.",
+    businessArgument: "Our advantage becomes defensible when domain experience is converted into permitted, structured, and reviewed assets.",
+    points: [
+      { title: "Understand the commissioning workflow", detail: "The brief describes power and liquid-cooling experience that can inform test dependencies, expected observations, exception handling, and acceptance boundaries. Publishable project credentials still need internal approval.", basis: "company-brief" },
+      { title: "Connect records to resolution", detail: "Historical issue logs and test reports can link symptoms, equipment context, checks, confirmed causes, corrective actions, and retest evidence. A raw collection of documents is not a verified failure library.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Capture tacit reasoning", detail: "Interview experienced engineers about why a check was selected, what evidence ruled out an alternative, and when escalation was necessary. Preserve uncertainty and equipment-specific limits.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Make expert validation a product capability", detail: "Require named reviewers, source revisions, case approval, and a correction history. AI can retrieve or explain an approved case; it cannot turn an unverified suggestion into an accepted root cause.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Earn the right to reuse knowledge", detail: "Access to field records does not establish ownership or commercial reuse rights. Build only from authorized material, with customer separation and manufacturer permissions where needed.", basis: "proposal", maturity: "PROPOSED PILOT" },
+    ],
+    visual: { type: "evidence-stack", description: "Stack field experience, permitted source records, structured failure cases, and expert sign-off beneath a proposed software layer. Put permission and revision checks at the entry gate rather than depicting an unrestricted data lake." },
+    keyTakeaway: "Domain experience is the starting advantage; governed, validated knowledge makes it reusable.",
+    transition: "That foundation enables a concrete first product: guided troubleshooting practice.",
+    speakerNotes: "Our strongest claim is not that we have access to a better language model. It is that the company brief describes engineers and project experience able to distinguish a plausible answer from a sound commissioning conclusion. That advantage must be made tangible. We need permitted records, equipment context, documented outcomes, and reviewers who can explain the diagnostic reasoning. Some lessons will remain specific to a model, revision, or site and should not be generalized. We also must confirm reuse rights before commercializing records. A reviewed failure library and its approval process are the proposed product assets; the availability and quality of those assets still require internal confirmation.",
+    referenceIds: [],
+    maturityLabels: ["PROPOSED PILOT"],
+  },
+  {
+    id: "05",
+    title: "AI-Powered Training & Failure Simulation",
+    headline: "Practice the reasoning before facing the fault on site.",
+    subtitle: "An expert-authored scenario controls equipment behavior; an AI Instructor guides explanation and reflection.",
+    businessArgument: "A focused training product can make diagnostic reasoning repeatable and assessable before broader platform expansion.",
+    points: [
+      { title: "Present an ambiguous cooling symptom", detail: "In an illustrative coolant distribution unit exercise, the flow value appears below the approved scenario range while other simulated evidence is inconsistent with a hydraulic restriction. The hidden fault is a stale supervisory value after a communications interruption.", basis: "illustrative", maturity: "PROPOSED PILOT" },
+      { title: "Keep the simulated state deterministic", detail: "An expert-authored state table fixes timestamps, local indications, pump feedback, and responses to permitted simulated checks. Rules determine observations and state transitions; the language model does not invent physics or change the answer.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Make the engineer choose the investigation", detail: "The learner compares local and supervisory evidence, checks freshness and signal mapping, distinguishes communication loss from low flow, and documents what remains uncertain before selecting an escalation path.", basis: "illustrative", maturity: "PROPOSED PILOT" },
+      { title: "Constrain the AI Instructor", detail: "Use retrieved, authorized references to explain terms and offer staged hints. Guidance must cite its source or abstain; answer leakage, unsupported advice, and contradiction of the scenario are evaluation failures.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Evaluate reasoning against an approved rubric", detail: "Score evidence selection, appropriate diagnostic ordering, procedural compliance, and justified escalation. Expert assessors review the trace; any conclusion and simulated retest follow the case's approved resolution, not live equipment instructions.", basis: "proposal", maturity: "PROPOSED PILOT" },
+    ],
+    visual: { type: "training-interaction", description: "Engineer ↔ AI Instructor ↔ Authorized reference retrieval, alongside Engineer ↔ Rules-based equipment simulator. A separate expert-approved case definition feeds the simulator and assessment rubric. Mark the stale flow-value case as illustrative and show no live telemetry." },
+    keyTakeaway: "AI explains the exercise; engineering rules and expert review define its technical validity.",
+    transition: "The same reviewed knowledge can support commissioning tasks beyond training.",
+    speakerNotes: "Consider a software-only coolant distribution unit exercise. The learner sees a low-flow value, but must establish whether the evidence indicates a real hydraulic issue or stale communication. An approved state table supplies consistent observations, including timestamps and local-versus-supervisory indications. The engineer chooses diagnostic checks; the AI Instructor explains references and offers staged hints. Crucially, the model does not calculate equipment behavior or decide that a fault has been resolved. Rules and an expert-approved case define those outcomes. Assessment considers reasoning and procedural discipline, not only time. This is an illustrative proposed pilot scenario, not a customer incident, an operational simulator, or guidance for intervening on live equipment.",
+    referenceIds: [],
+    maturityLabels: ["PROPOSED PILOT"],
+  },
+  {
+    id: "06",
+    title: "Commissioning Intelligence Platform",
+    headline: "One reviewed knowledge foundation, four connected engineering workflows.",
+    subtitle: "Start with document-based assistance and retain expert control over readiness, diagnosis, and acceptance.",
+    businessArgument: "A shared knowledge and review model can support multiple sellable workflows without building separate knowledge silos.",
+    points: [
+      { title: "AI Training & Failure Simulation", detail: "Deliver approved diagnostic cases, staged hints, and rubric-based review for engineer development. Training outcomes must be evaluated before making competency or productivity claims.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "AI Pre-Commissioning Validation", detail: "Compare document revisions, checklist coverage, prerequisites, and unresolved exceptions with approved project requirements. Flag gaps for the commissioning lead; document consistency checks do not prove equipment readiness.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "AI Troubleshooting Assistance", detail: "Retrieve relevant equipment references and reviewed historical cases, distinguish observations from hypotheses, and assemble an evidence trail for engineer review. No automatic diagnosis, switching, or protection-setting changes.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Digital Equipment Passport & Handover", detail: "Organize equipment identity, document revisions, test evidence, open issues, and acceptance status in a traceable handover record. The passport is a proposed information package, not an industry certification or a live Digital Twin.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Shared Engineering Knowledge Engine", detail: "Extend current RAG and Agent prototypes with source provenance, equipment/revision metadata, permissions, and expert review. Historical cases require approval; cross-site failure intelligence remains a possible future extension.", basis: "proposal", maturity: "PROPOSED PILOT" },
+    ],
+    visual: { type: "platform-layers", description: "Place the four named capabilities above one Engineering Knowledge Engine. Below it show authorized documents, approved historical cases, metadata, and expert review. Use separate CURRENT PROTOTYPE and PROPOSED PILOT boundaries; place cross-site intelligence outside the pilot boundary as FUTURE VISION." },
+    keyTakeaway: "Build shared evidence and review once, then test its value across distinct commissioning workflows.",
+    transition: "A common foundation becomes more valuable when verified lessons return to the engineering process.",
+    speakerNotes: "The platform has four proposed workflows: training, pre-commissioning validation, troubleshooting assistance, and an equipment passport for handover. They share an Engineering Knowledge Engine rather than four separate document collections. Existing RAG and Agent demonstrations are starting components; permissions, source revisions, case quality, and review still need product-level implementation. Validation means identifying document or prerequisite gaps, not authorizing energization. Troubleshooting means presenting relevant evidence, not declaring a diagnosis. The passport packages reviewed records, not live equipment behavior. A future cross-site capability could build on the same structure, but only after rights and comparability are established. The pilot should evaluate a bounded slice rather than assume all four products are ready.",
+    referenceIds: [],
+    maturityLabels: ["CURRENT PROTOTYPE", "PROPOSED PILOT", "FUTURE VISION"],
+  },
+  {
+    id: "07",
+    title: "Continuous Engineering Intelligence Loop",
+    headline: "Make each verified resolution improve the next engineering decision.",
+    subtitle: "Knowledge should return to training, commissioning practice, and product feedback through controlled review.",
+    businessArgument: "A reviewable learning loop can retain service knowledge and improve its reuse without silently spreading incorrect conclusions.",
+    points: [
+      { title: "Capture the engineering context", detail: "Record symptoms, equipment model and revision, test conditions, diagnostic reasoning, confirmed resolution, and retest evidence. Separate an engineer's hypothesis from a reviewed finding.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Validate before publishing", detail: "An authorized expert checks source rights, technical completeness, applicability limits, and the resolution. Approved cases become versioned knowledge; unconfirmed cases remain outside the released library.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Reuse and correct deliberately", detail: "Turn reviewed cases into training exercises and cited assistance. Route learner feedback and disputed answers to a review queue; corrections update the case and dependent content with a visible history.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Return insights to engineering", detail: "Potential outputs include checklist refinements and evidence-backed design feedback. Aggregated manufacturer reliability analysis needs comparable asset populations, exposure data, reuse permission, and careful treatment of reporting bias.", basis: "proposal", maturity: "FUTURE VISION" },
+    ],
+    visual: { type: "review-loop", description: "Field Experience → Expert Validation → Structured Knowledge → AI Training & Assistance → Engineering Feedback → Continuous Improvement → Field Experience. Add permission and quality gates before publication; place manufacturer/cross-site analysis on a future branch." },
+    keyTakeaway: "The loop improves only when knowledge is permitted, technically verified, and corrected when evidence changes.",
+    transition: "The pilot must establish whether this learning loop produces useful and affordable outcomes.",
+    speakerNotes: "The proposed loop begins with a resolved field issue, not with an AI-generated answer. An expert checks the evidence and the limits of applicability before the case enters a versioned library. That case can then support training or retrieval, and feedback can identify missing context or errors. Corrections should be reviewed and traceable rather than automatically absorbed into a model. Internally, this may help refine checklists and retain engineering knowledge. Manufacturer feedback and cross-site reliability analysis are later possibilities, requiring permissions and comparable populations. Counting issue reports alone cannot establish failure rates. The immediate business question is whether the reviewed loop is useful enough to justify its operating effort.",
+    referenceIds: [],
+    maturityLabels: ["PROPOSED PILOT", "FUTURE VISION"],
+  },
+  {
+    id: "08",
+    title: "Business Value & Pilot Validation",
+    headline: "Validate an economic case before making an ROI claim.",
+    subtitle: "Use 10–20 verified historical scenarios to test quality, effort, and user value in a bounded pilot.",
+    businessArgument: "A controlled pilot should determine whether observed benefits justify delivery cost and a paid next phase.",
+    points: [
+      { title: "Select a narrow, authorized corpus", detail: "Use 10–20 verified historical troubleshooting scenarios from one equipment family or commissioning scope. Include permissions, reviewed resolutions, equipment context, and difficult or insufficient-evidence cases; this is a proposed sample, not an existing dataset.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Compare like-for-like work", detail: "Compare approved documents/search alone with the same sources plus AI assistance. Assign engineers to matched cases, balance experience and case difficulty, counterbalance condition order, and withhold evaluation cases and solutions from AI retrieval and learner practice.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Measure value without trading away quality", detail: "Track training preparation effort, time to a defensible diagnosis, justified expert escalation, readiness omissions, procedural compliance, and later unseen-case retention. Measure delay/rework proxies in the exercise; actual avoided site delays require separate field follow-up.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Reduce bias and expose failure", detail: "Use blinded expert scoring where practical, pre-agreed rubrics, consistent assistance limits, and explicit abstention criteria. Record unsupported advice, missed evidence, hint dependence, and all unsuccessful attempts; report distributions and small-sample limits.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Gate the commercial next step", detail: "Include case authoring, reviewer time, user effort, cloud/software cost, and support in the economics. Seek a bounded sponsored pilot, then assess a training/content subscription or project-workspace offer against buyer willingness to pay. No savings percentage or payback is demonstrated.", basis: "proposal", maturity: "PROPOSED PILOT" },
+    ],
+    visual: { type: "pilot-scorecard", description: "Show authorized 10–20-case library → separated development/evaluation sets → balanced baseline and AI-assisted tasks → quality/effort/cost scorecard → stop, revise, or propose a paid next phase. All scorecard cells describe measures, not invented result values." },
+    keyTakeaway: "Success means credible quality and economic evidence, including reasons not to expand.",
+    transition: "Pilot evidence should control the roadmap rather than follow a promise of unproven capabilities.",
+    speakerNotes: "We propose a bounded pilot using ten to twenty verified historical scenarios. Start with one equipment scope and confirm data permissions before selecting cases. Compare the same approved sources with and without AI assistance, while balancing engineer experience and case difficulty. Evaluation cases and their solutions must stay out of the retrieval library and practice sessions. Experts should score reasoning and procedural quality, with condition-blinded review where practical. We will also track time, escalation, training effort, and all delivery costs. This small pilot can support a decision about further investment and buyer interest; it cannot demonstrate avoided outages, fleet-level reliability improvements, or a guaranteed return on investment.",
+    referenceIds: [],
+    maturityLabels: ["PROPOSED PILOT"],
+  },
+  {
+    id: "09",
+    title: "Technology Roadmap",
+    headline: "Advance through evidence gates, not claims of readiness.",
+    subtitle: "Separate demonstrated elements, the proposed pilot, and capabilities dependent on new data and validation.",
+    businessArgument: "A staged roadmap protects credibility and focuses investment on the next verifiable customer outcome.",
+    points: [
+      { title: "CURRENT PROTOTYPES — document-based intelligence", detail: "The business brief reports demonstrated equipment-document retrieval, RAG, engineering knowledge access, AI Agent workflows, and Digital Twin prototype elements. Their coverage, fidelity, and repeatability require an internal evidence inventory.", basis: "company-brief", maturity: "CURRENT PROTOTYPE" },
+      { title: "PROPOSED PILOT — reviewed engineering workflows", detail: "Build a structured failure library and bounded training simulator; evaluate document readiness checks, cited troubleshooting guidance, and handover records within an approved scope. Commercial and technical acceptance criteria precede expansion.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "FUTURE VISION — authorized operational context", detail: "Explore manufacturer-approved PLC, sensor, alarm, and time-series access. Advanced physics-based simulation needs calibrated models and validation; neither a document assistant nor a prototype element establishes a working operational twin.", basis: "proposal", maturity: "FUTURE VISION" },
+      { title: "FUTURE VISION — broader reliability intelligence", detail: "Consider cross-site failure analysis, predictive maintenance, and human-supervised optimization only with permitted, representative longitudinal data and validated methods. No autonomous control or completed customer integration is claimed.", basis: "proposal", maturity: "FUTURE VISION" },
+    ],
+    visual: { type: "gated-roadmap", description: "Three columns labeled exactly CURRENT PROTOTYPES, PROPOSED PILOT, and FUTURE VISION. Gate 1: authorized cases and repeatable demonstration; Gate 2: pilot quality and economics; Gate 3: operational-data permissions and model validation. Show dependencies, not dates or completion percentages." },
+    keyTakeaway: "Demonstrated elements justify investigation; validated pilot outcomes justify the next investment.",
+    transition: "A potential Google Cloud discussion should focus on the infrastructure needed for that next evidence gate.",
+    speakerNotes: "The roadmap separates what the company reports demonstrating from what we propose building and what depends on future conditions. Document retrieval, RAG, Agent workflows, and Digital Twin prototype elements are current experiments. They are not equivalent to a production operational twin or an integrated customer deployment. The next stage is a bounded, reviewed pilot. Sensor connectivity, advanced physical simulation, cross-site analysis, predictive maintenance, and supervised optimization require additional permissions, data, and validation. Access discussions with equipment manufacturers are exploratory and do not establish authorization. We should advance when the evidence supports the next stage, without promising dates, autonomous control, or a capability that the current prototypes have not shown.",
+    referenceIds: [],
+    maturityLabels: ["CURRENT PROTOTYPE", "PROPOSED PILOT", "FUTURE VISION"],
+  },
+  {
+    id: "10",
+    title: "Google Cloud Partnership Opportunity",
+    headline: "Explore a technical fit around a focused commissioning pilot.",
+    subtitle: "A potential collaboration discussion combining engineering domain expertise with cloud, AI, search, and agent infrastructure.",
+    businessArgument: "Seek a scoped technical and commercial conversation, not an implied partnership or an infrastructure-first commitment.",
+    points: [
+      { title: "WHY NOW — an addressable engineering need", detail: "The preceding sections identify a document-based starting point: preparing engineers, reviewing readiness evidence, and retrieving relevant troubleshooting knowledge. The pilot tests whether assistance improves those workflows economically.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "WHY US — engineering context and validation", detail: "We bring the experience described in the brief and a proposed process for converting permitted field records into reviewed cases. Our responsibility is domain scope, case quality, engineering validation, and user access to the pilot.", basis: "company-brief" },
+      { title: "WHY GOOGLE CLOUD — potential complementary infrastructure", detail: "Google Cloud's manufacturing materials describe enterprise AI, search, agents, and industrial data applications. We propose assessing those capabilities alongside storage, identity, logging, and evaluation needs; no product selection or partnership is agreed.", basis: "industry-source", maturity: "PROPOSED PILOT", referenceIds: ["google-cloud-manufacturing", "google-cloud-storage", "google-enterprise-search-access", "google-agent-platform"] },
+      { title: "Discuss a bounded architecture", detail: "Review authorized document ingestion, source-level access controls, cited retrieval, instructor constraints, deterministic simulation, and evaluation. Confirm current service names, regional availability, costs, retention, and model-data terms before any deployment.", basis: "proposal", maturity: "PROPOSED PILOT" },
+      { title: "Make the next step concrete", detail: "Ask leadership to identify a sponsor and engineering reviewers; ask whether Google representatives would consider a technical scoping session. Any pilot scope, funding, credits, resource support, introductions, or partnership status remains subject to separate agreement.", basis: "proposal", maturity: "PROPOSED PILOT" },
+    ],
+    visual: { type: "complementary-strengths", description: "Two columns: Our proposed contribution — permitted cases, domain experts, validation, user workflow; Google Cloud capabilities to assess — cloud infrastructure, AI/search/agents, governance and evaluation. Connect them to a proposed scoping workshop, with an explicit 'No existing partnership or commitment' caption." },
+    keyTakeaway: "Request a focused feasibility discussion with clear engineering responsibilities and no assumed commitments.",
+    transition: "Decision requested: nominate an internal sponsor and reviewers, confirm permitted cases, and decide whether to seek a Google Cloud scoping discussion.",
+    speakerNotes: "The proposed discussion has three parts. Why now: there is a defined commissioning workflow to test, not an open-ended AI transformation claim. Why us: the company brings field context and engineers who can validate cases, subject to confirming usable records and reviewer capacity. Why Google Cloud: its published manufacturing materials describe infrastructure, enterprise AI, search, and agent capabilities that may fit this pilot. That fit is our hypothesis, not a vendor recommendation. We would ask whether a technical scoping conversation is appropriate and review governance, evaluation, and costs. No partnership, funding, credits, resources, customer introductions, or deployment commitments are assumed. Leadership's immediate decision is sponsorship and a permitted evidence base.",
+    referenceIds: ["google-cloud-manufacturing", "google-cloud-storage", "google-enterprise-search-access", "google-agent-platform"],
+    maturityLabels: ["PROPOSED PILOT"],
+  },
+] as const satisfies readonly PresentationSection[];

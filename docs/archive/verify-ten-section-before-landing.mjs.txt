@@ -1,0 +1,55 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import { executiveContent, presentationSections } from "../src/content/presentation.ts";
+import { references } from "../src/content/references.ts";
+
+// Run after npm run build with Node 24. Only checks files; no server or browser needed.
+const escapeHtml = text => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#x27;");
+assert.equal(presentationSections.length, 10);
+for (const file of ["out/index.html", "out/presentation/index.html"]) {
+  const html = fs.readFileSync(file, "utf8");
+  const dom = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+  assert.equal((dom.match(/<section\b/g) || []).length, 10, file);
+  for (const section of presentationSections) {
+    assert.ok(dom.includes(`id="section-${section.id}"`));
+    assert.ok(dom.includes(`href="#section-${section.id}"`));
+    const copy = [section.headline, section.subtitle, section.businessArgument, section.keyTakeaway, ...section.points.flatMap(point => [point.title, point.detail])];
+    for (const text of copy) {
+      assert.equal(dom.split(escapeHtml(text)).length - 1, 1, `${file}: missing or duplicated copy: ${text.slice(0, 70)}`);
+    }
+    for (const id of section.referenceIds) {
+      const reference = references.find(item => item.id === id);
+      assert.ok(reference, `Unknown reference: ${id}`);
+      assert.ok(dom.includes(escapeHtml(reference.url)), `Missing citation: ${id}`);
+    }
+  }
+  const ids = [...dom.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(ids.length, new Set(ids).size, "Duplicate DOM IDs");
+  for (const match of dom.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.includes(match[1]), `Broken anchor: ${match[1]}`);
+  assert.ok(!/Previous slide|Next slide|slide-stage|deck-controls/.test(html));
+  assert.equal(dom.split(escapeHtml(executiveContent.decision)).length - 1, 1, "One leadership decision");
+  assert.ok(dom.includes("~40%") && dom.includes("85%"), "Scoped industry figures");
+  assert.equal((dom.match(/class="product-preview"/g) || []).length, 1, "One compact product concept");
+  assert.equal((dom.match(/class="diagnostic-workspace\s*"/g) || []).length, 1, "One full diagnostic demonstration");
+  assert.equal((dom.match(/class="roadmap-phase"/g) || []).length, 3, "Three maturity stages");
+}
+
+const narrativeWords = presentationSections.reduce((sum, section) => sum + [section.headline, section.subtitle, section.businessArgument, section.keyTakeaway, ...section.points.flatMap(point => [point.title, point.detail])].join(" ").split(/\s+/).length, 0);
+assert.ok(narrativeWords >= 2008 * .55 && narrativeWords <= 2008 * .65, "Executive narrative reduction stays within the requested 35–45% range");
+for (const archive of ["presentation-before-executive.ts.txt", "references-before-executive.ts.txt", "content-review-before-executive.md"]) {
+  assert.ok(fs.existsSync(`docs/archive/${archive}`), `Original retained: ${archive}`);
+  assert.ok(!fs.existsSync(`out/docs/archive/${archive}`), `Internal archive must not be published: ${archive}`);
+}
+
+const walk = directory => fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(`${directory}/${entry.name}`) : [`${directory}/${entry.name}`]);
+for (const file of walk("out")) {
+  if (!/\.(html|txt|js|json|map)$/.test(file)) continue;
+  const content = fs.readFileSync(file, "utf8");
+  for (const section of presentationSections) {
+    for (const privateText of [section.speakerNotes, section.transition]) {
+      assert.ok(!content.includes(privateText), `Private presenter copy in ${file}`);
+      assert.ok(!content.includes(JSON.stringify(privateText).slice(1, -1)), `Serialized private copy in ${file}`);
+    }
+  }
+}
+console.log(`PASS: 10 sections per route, exact source copy once, valid anchors/citations, one compact preview and one full exercise, three roadmap phases, one leadership decision; ${narrativeWords} narrative words versus 2008 original; archives retained outside export; no private narratives in built assets.`);

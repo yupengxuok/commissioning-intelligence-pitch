@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { platform } from "@/content/platform";
 import "./globals.css";
+import "./landing.css";
 
 export const metadata: Metadata = {
   title: { default: platform.name, template: `%s | ${platform.name}` },

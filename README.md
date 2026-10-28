@@ -1,110 +1,98 @@
 # Commissioning Intelligence Platform
 
-A static, presentation-first foundation for an internal data center engineering proposal, structured for later adaptation into a public B2B website. This phase provides the design system, starter content, and two routes. It is not a connected product or a completed business proposal.
+A concise B2B executive landing page about turning commissioning experience into reusable engineering products, starting with one measurable pilot. Six continuous sections cover the opportunity, industry problem, product, field advantage, commercial path, and proposed Google Cloud discussion.
 
-面向数据中心工程公司的静态提案展示基础：企业官网模式与 16:9 演示模式共用组件和内容。下方为实际页面截图；交互体验可按运行说明在本地打开。
+![Executive landing page desktop preview](docs/images/scrolling-presentation-preview.png)
 
-## Website preview
+## View the complete website
 
-### Company website · `/`
+The complete six-section page is shown below. Click the image to open it at full resolution. These screenshots can be viewed directly on GitHub without installing or running the project.
 
-An enterprise engineering landing page with a conceptual system diagram, capability descriptions, and explicit development boundaries.
+[![Complete six-section executive landing page](docs/images/landing-full-page.png)](docs/images/landing-full-page.png)
 
-![Company website preview showing the engineering headline and conceptual platform architecture](docs/images/website-preview.png)
+<details>
+<summary>Mobile preview — current version</summary>
 
-### Presentation mode · `/presentation/`
+![Current mobile diagnostic workspace](docs/images/landing-mobile.png)
 
-A 16:9 proposal workspace with four starter slides, an outline, keyboard navigation, and fullscreen controls.
+</details>
 
-![Presentation preview showing the 16:9 cover slide, conceptual architecture, outline, and slide navigation](docs/images/presentation-preview.png)
+<details>
+<summary>Historical screenshots — earlier versions, retained for reference</summary>
 
-| Website content | Current status |
-| --- | --- |
-| Engineering knowledge / RAG | Prototype |
-| Commissioning / AI Agent workflows | Prototype |
-| Digital Twin functionality | In development |
-| Real-time PLC and sensor integration | Not established |
-| Predictive maintenance | Future vision |
+These are previous designs, not the current six-section landing page.
 
-The README displays static screenshots; GitHub does not execute the Next.js application inside Markdown. No hosted website has been deployed as part of this repository upload.
+![Earlier executive decision section](docs/images/executive-decision.png)
 
-## Local development
+![Earlier executive mobile preview](docs/images/executive-mobile.png)
 
-Use Node.js 24 LTS (verified with 24.16.0) and npm.
+![Earlier refined laptop hero](docs/images/refined-hero-laptop.png)
+
+![Earlier refined mobile hero](docs/images/refined-hero-mobile.png)
+
+![Original presentation foundation](docs/images/presentation-preview.png)
+
+![Original company website foundation](docs/images/website-preview.png)
+
+</details>
+
+The website has not been deployed to a public URL. The localhost links below work only on the computer running the development server. GitHub's README displays the screenshots; it does not run the Next.js application.
+
+## Run locally
+
+Use Node.js 24 LTS and npm:
 
 ```sh
-git clone https://github.com/yupengxuok/commissioning-intelligence-pitch.git
-cd commissioning-intelligence-pitch
 npm ci
 npm run dev
 ```
 
-Open [website mode](http://127.0.0.1:3000) or [presentation mode](http://127.0.0.1:3000/presentation/).
+Open [the homepage](http://127.0.0.1:3000/) or [the presentation](http://127.0.0.1:3000/presentation/). Both render the same six-section page. Sticky anchor navigation scrolls horizontally on narrow screens. No carousel, slide transitions, page snapping, or live integrations are used.
+
+## Verify and build
 
 ```sh
 npm run typecheck
 npm run build
+node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/verify-presentation.mjs
 ```
 
-The production build generates static files in `out/`. Serve that directory using a static HTTP server with directory index support. Opening the HTML files directly through `file://` is not supported. No production Node server, environment variables, credentials, database, or external AI services are needed. Internal Next.js navigation loads only local static assets.
+The build script selects the built-in Webpack compiler because the local Turbopack CSS worker failed during final verification. No dependencies were changed.
 
-## Routes and controls
+Static output is exported to `out/`; serve it over HTTP with directory indexes. No production runtime, credentials, database, authentication, external AI calls, or additional dependencies are needed. No deployment has been performed.
 
-| Route | Purpose |
+The verification script checks both exports for six sections, the 350–550-word budget, anchors, citations, one equipment schematic, and absence of scorecards and internal speaker/methodology text. It also checks preservation hashes for the detailed proposal, references, speaker notes, and content review. The current main-page count is **388 words**, including diagram labels and simulated states, excluding navigation, citations, footer disclosures, and decorative indices.
+
+## Architecture and content
+
+| File | Purpose |
 | --- | --- |
-| `/` | Company website scaffold: platform concept, capability placeholders, development boundaries |
-| `/presentation/` | Four starter slides in a reusable 16:9 stage |
+| `src/content/landing.ts` | Concise six-section landing copy, separate from the detailed proposal |
+| `src/components/presentation/executive-landing.tsx` | Shared server-rendered landing page |
+| `src/components/presentation/engineering-diagrams.tsx` | Existing diagnostic workspace and compact engineering loop |
+| `src/content/engineering-visuals.ts` | Centralized illustrative diagram labels and simulated states |
+| `src/app/landing.css` | Scoped enterprise landing styles and responsive layouts |
+| `src/app/page.tsx`, `src/app/presentation/page.tsx` | Homepage and presentation entry points |
+| `src/content/presentation.ts` | Preserved ten-section internal proposal, including detailed pilot evaluation |
+| `src/content/references.ts` | Eight preserved source records; the landing page cites two relevant sources |
+| `docs/speaker-notes.md` | Ten internal speaker narratives, excluded from website imports |
+| `docs/content-review.md` | Outstanding business assumptions and company confirmations |
+| `docs/archive/landing-preservation.json` | Detailed-content preservation hashes |
+| `scripts/verify-presentation.mjs` | Export integrity, word budget, and internal-content exclusion checks |
+| `docs/landing-redesign.md` | Current redesign and verification record |
 
-Presentation controls include Previous/Next, slide dots, outline selection, an outline toggle, and browser fullscreen where available. Use Left/Right, Page Up/Page Down, Space, Home, and End when focus is outside interactive controls. Navigation stops at the first and last slides. Slides scale proportionally on small screens; use landscape or fullscreen for comfortable presentation reading. The outline remains accessible on narrow screens. Browser print prints the currently selected slide; PDF deck export and presenter notes are outside this foundation.
+The previous ten-section renderer and historical archives remain in the repository for internal reference. They are not imported by the landing routes. Speaker notes and evaluation methodology are not exposed through public routes or exported assets. Repository access is separate from website access.
 
-## Structure
+## Product and evidence boundaries
 
-```text
-src/
-  app/
-    globals.css              # Tokens, website layout, 16:9 slide styles
-    layout.tsx               # Shared metadata and accessibility entry point
-    page.tsx                 # Company website scaffold
-    presentation/page.tsx    # Presentation route
-    not-found.tsx            # Route fallback
-  components/
-    ui/                      # Locally owned shadcn/ui primitives
-    presentation/
-      slide.tsx              # Reusable slide frame and starter layouts
-      presentation-deck.tsx  # Client-side navigation and fullscreen controls
-    brand.tsx
-    platform-diagram.tsx     # Shared, explicitly conceptual system diagram
-    section.tsx              # Reusable website section frame
-    status-badge.tsx         # Consistent capability maturity labels
-  content/platform.ts        # Typed proposal copy, slides, diagram and statuses
-  lib/utils.ts               # shadcn class composition helper
-docs/PROJECT_BRIEF.md         # Positioning, design and content constraints
-```
+The diagnostic workspace is an illustrative proposed training exercise. RAG and Agent workflows remain prototypes; broader Digital Twin capability is under development. Live PLC/sensor integration is not established. Predictive maintenance remains a future vision. Potential benefits, a paid pilot, and recurring licensing are hypotheses requiring validation.
 
-## Stack and component ownership
+The Uptime statistics retain their respective organization/incident denominators and source attribution; they do not represent preventable outage rates. Google Cloud capabilities describe a possible technical fit, without an existing partnership or resource commitment. Data reuse requires authorization. Read `docs/content-review.md` before external reuse.
 
-- Next.js 16.4.3, App Router, TypeScript, React 19.
-- Tailwind CSS 4 through its PostCSS plugin.
-- Locally owned shadcn/ui Button, Badge, and Card components, adapted to the engineering theme. The Button uses Radix Slot for semantic link composition; no full UI library is shipped.
-- Lucide icons, class-variance-authority, clsx, and tailwind-merge.
-- Exact versions and `package-lock.json` are committed as project files for reproducible installs. There is no animation library, remote font dependency, tracking, or runtime API integration.
+## Design and stack
 
-Component configuration lives in `components.json`; future shadcn additions should respect the existing tokens and locally modified primitives. Edit the typed content module before editing individual route markup. Add slide entries and their matching layout to expand the placeholder deck.
+Existing Next.js App Router, TypeScript, React, Tailwind CSS, local shadcn/ui primitives, and Lucide icons. Versions remain pinned in the existing lockfile. Navy, white, and light gray editorial layouts use large statistics, a single equipment workspace, a compact learning loop, and a concise commercialization path.
 
-## Design reference and version selection
+The [shadcn landing-page reference](https://github.com/nobruf/shadcn-landing-page) informed layout and spacing; its older dependencies were not adopted. No new dependencies were added. The site retains `noindex, nofollow` metadata.
 
-[nobruf/shadcn-landing-page](https://github.com/nobruf/shadcn-landing-page) informed the modular landing-page structure, spacing, CTA hierarchy, and component organization. Its source and dependency versions were not copied. This foundation replaces promotional proof sections with engineering context and maturity disclosures.
-
-Next.js 16.4.3 was selected from the stable npm release; Next.js 16 is listed as Active LTS in the [official support policy](https://nextjs.org/support-policy). Static output follows the [official export guide](https://nextjs.org/docs/app/guides/static-exports). Review supported versions and security patches before future releases.
-
-## Content and publication
-
-Read `docs/PROJECT_BRIEF.md` before expanding the site. RAG and AI Agent workflows remain prototypes; Digital Twin functionality is in development; real-time PLC/sensor integration is not established; predictive maintenance remains a future vision. The diagram is conceptual and contains no operational data.
-
-The pages currently include internal proposal labels and `noindex, nofollow` metadata. These are editorial and indexing controls, not access protection. Use an appropriately restricted host for internal materials. Before a public adaptation, review approved positioning and evidence, replace proposal-specific copy, and deliberately review the indexing settings. This task does not register, publish, or deploy a hosted website.
-
-## Foundation scope
-
-Included: responsive route scaffolds, shared content and visual primitives, conceptual diagram, maturity labels, and local presentation controls.
-
-Deferred: full proposal narrative, case studies, customer evidence, confirmed partnerships, contact submission, live dashboards, backend services, authentication, Digital Twin behavior, device integration, predictive maintenance, and AI execution.
+For a PDF, use the browser Print dialog, disable browser headers/footers, and enable background graphics if desired. Print styles are responsive rather than fixed-page slide layouts; review pagination before sharing.
